@@ -18,9 +18,10 @@ public class Item
 
         if (!string.IsNullOrEmpty(prefabname))
         {
-            GameObject prefab = Resources.Load<GameObject>(prefabname);
+            NorItemType prefab = Resources.Load<NorItemType>(prefabname);
             if (prefab)
             {
+                prefab.SetupSpr(prefabname);
                 View = GameObject.Instantiate(prefab).transform;
             }
         }

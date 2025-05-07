@@ -15,4 +15,13 @@ public class GameSettings : ScriptableObject
     public float LevelTime = 30f;
 
     public float TimeForHint = 5f;
+
+    public Item[] normalItem;
+
+    [System.Serializable]
+    public struct Item
+    {
+        public string nameItem;
+        public Sprite itemSpr;
+    }
 }

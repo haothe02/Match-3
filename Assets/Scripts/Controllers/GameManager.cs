@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
         TIMER,
         MOVES
     }
-
+    private eLevelMode elvMode;
+    public eLevelMode GetElvMode() { return elvMode; }
     public enum eStateGame
     {
         SETUP,
@@ -80,12 +81,17 @@ public class GameManager : MonoBehaviour
             DOTween.PlayAll();
         }
     }
-
+    public void LoadLvAgain()
+    {
+        ClearLevel();
+        LoadLevel(elvMode);
+        SetState(GameManager.eStateGame.GAME_STARTED);
+    }
     public void LoadLevel(eLevelMode mode)
     {
         m_boardController = new GameObject("BoardController").AddComponent<BoardController>();
         m_boardController.StartGame(this, m_gameSettings);
-
+        elvMode = mode;
         if (mode == eLevelMode.MOVES)
         {
             m_levelCondition = this.gameObject.AddComponent<LevelMoves>();

@@ -25,9 +25,7 @@ public class UIMainManager : MonoBehaviour
     }
     internal void PLayGameAgain()
     {
-        m_gameManager.ClearLevel();
-        LoadLevelTimer();
-        m_gameManager.SetState(GameManager.eStateGame.GAME_STARTED);
+        m_gameManager.LoadLvAgain();
     }
     internal void ShowMainMenu()
     {

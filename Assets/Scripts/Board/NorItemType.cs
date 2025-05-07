@@ -6,6 +6,7 @@ public class NorItemType : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer itemSpr;
     [SerializeField] private GameSettings gameSettings;
+    public SpriteRenderer GetSpriteRenderer() { return itemSpr; }
     public void SetupSpr(string nameItem)
     {
         for (int i = 0; i < gameSettings.normalItem.Length; i++)

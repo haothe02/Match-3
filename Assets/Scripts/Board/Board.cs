@@ -138,6 +138,25 @@ public class Board
 
     internal void FillGapsWithNewItems()
     {
+        //for (int x = 0; x < boardSizeX; x++)
+        //{
+        //    for (int y = 0; y < boardSizeY; y++)
+        //    {
+        //        Cell cell = m_cells[x, y];
+        //        if (!cell.IsEmpty) continue;
+
+        //        NormalItem item = new NormalItem();
+
+        //        item.SetType(Utils.GetRandomNormalType());
+        //        item.SetView();
+        //        item.SetViewRoot(m_root);
+
+        //        cell.Assign(item);
+        //        cell.ApplyItemPosition(true);
+        //    }
+        //}
+        int typeCount = Enum.GetValues(typeof(NormalItem.eNormalType)).Length;
+
         for (int x = 0; x < boardSizeX; x++)
         {
             for (int y = 0; y < boardSizeY; y++)
@@ -145,16 +164,52 @@ public class Board
                 Cell cell = m_cells[x, y];
                 if (!cell.IsEmpty) continue;
 
-                NormalItem item = new NormalItem();
+                var neighborTypes = new HashSet<NormalItem.eNormalType>();
+                foreach ((int dx, int dy) in new[] { (-1, 0), (1, 0), (0, -1), (0, 1) })
+                {
+                    int nx = x + dx, ny = y + dy;
+                    if (nx >= 0 && ny >= 0 && nx < boardSizeX && ny < boardSizeY)
+                    {
+                        var neighbor = m_cells[nx, ny].Item as NormalItem;
+                        if (neighbor != null)
+                            neighborTypes.Add(neighbor.ItemType);
+                    }
+                }
 
-                item.SetType(Utils.GetRandomNormalType());
-                item.SetView();
-                item.SetViewRoot(m_root);
+                int[] counts = new int[typeCount];
+                foreach (var c in m_cells)
+                {
+                    if (c.Item is NormalItem item)
+                        counts[(int)item.ItemType]++;
+                }
 
-                cell.Assign(item);
+                
+                NormalItem.eNormalType selectedType = NormalItem.eNormalType.TYPE_THREE;
+                int minCount = int.MaxValue;
+
+                foreach (NormalItem.eNormalType type in Enum.GetValues(typeof(NormalItem.eNormalType)))
+                {
+                    if (neighborTypes.Contains(type)) continue;
+
+                    int count = counts[(int)type];
+                    if (count < minCount)
+                    {
+                        minCount = count;
+                        selectedType = type;
+                    }
+                }
+
+                // 4. Tạo item mới
+                NormalItem newItem = new NormalItem();
+                newItem.SetType(selectedType);
+                newItem.SetView();
+                newItem.SetViewRoot(m_root);
+
+                cell.Assign(newItem);
                 cell.ApplyItemPosition(true);
             }
         }
+
     }
 
     internal void ExplodeAllItems()

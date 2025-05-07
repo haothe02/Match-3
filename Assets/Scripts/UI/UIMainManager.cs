@@ -23,7 +23,12 @@ public class UIMainManager : MonoBehaviour
             m_menuList[i].Setup(this);
         }
     }
-
+    internal void PLayGameAgain()
+    {
+        m_gameManager.ClearLevel();
+        LoadLevelTimer();
+        m_gameManager.SetState(GameManager.eStateGame.GAME_STARTED);
+    }
     internal void ShowMainMenu()
     {
         m_gameManager.ClearLevel();
